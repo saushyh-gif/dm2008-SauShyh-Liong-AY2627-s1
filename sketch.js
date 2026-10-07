@@ -19,6 +19,7 @@ let bird;
 let pipes = [];
 let score = 0;
 let spawnCounter = 0;
+let highscore = 0;
 
 const SPAWN_RATE = 90;
 const PIPE_SPEED = 2.5;
@@ -62,7 +63,7 @@ function draw() {
       // When the bird hits a pipe, trigger game over
       if (pipes[i].hits(bird)) {
         // What should happen when the game ends?
-        sound_die.play(); 
+        sound_die.play();
         gameState = "gameover";
       }
 
@@ -91,21 +92,22 @@ function draw() {
   }
 
   if (gameState === "gameover") {
+    if (score > highscore) {
+      highscore = score;
+    }
     // What should the player see when the game ends?
     textAlign(CENTER, CENTER);
     textStyle(BOLD);
-    
+
     fill(77, 130, 46);
     textSize(50);
     text("GAME OVER", width / 2, height / 3);
     // How do they restart?
-    
+
     fill("white");
     textSize(30);
     text("Press SPACE to Restart", width / 2, (height * 3) / 4);
-    
-    fill("white");
-    textSize(30);
+    text("Best: " + highscore, width / 2, height / 2 + 40);
     text("Score: " + score, width / 2, height / 2);
   }
 
@@ -119,7 +121,7 @@ function draw() {
     text("FLAPPY BIRD", width / 2, height / 3);
     fill("white");
     textSize(30);
-    text("Press SPACE to Start", width / 2, (height * 3) / 4);    
+    text("Press SPACE to Start", width / 2, (height * 3) / 4);
   }
 }
 
@@ -164,7 +166,7 @@ class Bird {
   flap() {
     // A negative y velocity moves the bird upward
     this.vel.y = this.flapStrength;
-    sound_wing.play(); 
+    sound_wing.play();
   }
 
   update() {
@@ -183,7 +185,7 @@ class Bird {
     if (this.pos.y > height - this.r) {
       this.pos.y = height - this.r;
       this.vel.y = 0;
-      sound_die.play(); 
+      sound_die.play();
       gameState = "gameover";
     }
   }
